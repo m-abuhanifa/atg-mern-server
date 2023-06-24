@@ -3,6 +3,42 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const registerUser = async (req, res) => {
+  const { password, ...user } = req.body;
+
+  try {
+    const hashed = await bcrypt.hash(password, 10);
+    const duplicateEmail = await User.findOne({ email: req.body.email });
+    const duplicateUser = await User.findOne({ username: req.body.username });
+
+    if (duplicateEmail) {
+      res.status(400).json({
+        status: "fail",
+        message: `User with email : '${req.body.email}' already exists `,
+      });
+      return;
+    } else if (duplicateUser) {
+      res.status(400).json({
+        status: "fail",
+        message: `User with username : '${req.body.username}' already exists `,
+      });
+      return;
+    } else {
+      const newUser = await User.create({ ...user, password: hashed });
+      res.status(201).json({
+        status: "success",
+        message: `User created successfully with name: ${newUser.username} and email: ${newUser.email}`,
+        data: {
+          username: newUser.username,
+          email: newUser.email,
+        },
+      });
+    }
+  } catch (error) {
+    res.json({ message: error });
+  }
+};
+
 const handleLogin = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
@@ -42,4 +78,4 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleLogin };
+module.exports = { handleLogin, registerUser };
