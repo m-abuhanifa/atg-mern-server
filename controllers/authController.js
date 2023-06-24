@@ -54,6 +54,7 @@ const handleLogin = async (req, res) => {
     if (!match) {
       return res.json({
         message: "Wrong password",
+        reset: "Want to reset password?",
       });
     }
 
