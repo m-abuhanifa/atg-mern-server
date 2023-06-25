@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const authRouter = require("./routes/authRoute");
+const postRouter = require("./routes/postRoute");
 
 app.use(express.json());
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(morgan("common"));
 // api
 
 app.use("/api", authRouter);
+app.use("/api/posts", postRouter);
 
 //MongoDB connection
 connectDB();
