@@ -14,7 +14,19 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find()
+      .populate({
+        path: "user",
+        select: "_id username",
+      })
+      .populate({
+        path: "likes",
+        select: "_id username",
+      })
+      .populate({
+        path: "comments.user",
+        select: "_id username",
+      });
 
     res
       .status(200)
@@ -36,7 +48,7 @@ const getPost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.userId === req.body.userId) {
+    if (post?.userId === req.body.userId) {
       await post.deleteOne();
       res.status(200).json("the post has been deleted");
     } else {
