@@ -70,7 +70,7 @@ const handleLogin = async (req, res) => {
 
       res.json({
         message: "Login successful",
-        data: { ...otherDetails },
+        data: { username: user.username, id: user._id },
         token,
       });
     }
