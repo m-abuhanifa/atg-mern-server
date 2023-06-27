@@ -79,4 +79,34 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleLogin, registerUser };
+const resetPassword = async (req, res) => {
+  const { username, email, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ username, email });
+
+    if (!user) {
+      res.status(400).json({
+        status: "fail",
+        message: "Invalid username or email",
+      });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "An error occurred while resetting the password",
+    });
+  }
+};
+
+module.exports = { handleLogin, registerUser, resetPassword };
