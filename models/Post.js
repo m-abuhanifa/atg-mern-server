@@ -9,11 +9,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -31,11 +27,10 @@ const postSchema = new mongoose.Schema({
     type: [
       {
         text: String,
-        userId: {
+        user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        username: String,
       },
     ],
     default: [],

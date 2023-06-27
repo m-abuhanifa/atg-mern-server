@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const authRouter = require("./routes/authRoute");
 const postRouter = require("./routes/postRoute");
+const Post = require("./models/Post");
 
 app.use(express.json());
 app.use(cors());
@@ -28,3 +29,8 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`App listening at port ${port}`);
 });
+
+// Post.find()
+// .populate('user' , '-password')
+// .then(p=>console.log(p))
+// .catch(error=>console.log(error));
