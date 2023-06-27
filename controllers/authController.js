@@ -87,7 +87,7 @@ const resetPassword = async (req, res) => {
 
     if (!user) {
       res.status(400).json({
-        status: "fail",
+        status: "failed",
         message: "Invalid username or email",
       });
       return;
