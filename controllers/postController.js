@@ -82,13 +82,21 @@ const likeUnlikePost = async (req, res) => {
 const commentPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    await post.updateOne({ $push: { comments: req.body } });
-    res.status(200).json("The post has been commented");
+
+    post.comments.push({
+      user: req.body.userId,
+      text: req.body.text,
+    });
+
+    await post.save();
+
+    res
+      .status(200)
+      .json({ message: "The post has been commented", success: true });
   } catch (error) {
-    res.json({ message: error, success: false });
+    res.status(500).json({ message: error.message, success: false });
   }
 };
-
 module.exports = {
   createPost,
   getAllPosts,
